@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #ffe6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: radial-gradient(#ff9999 2px, transparent 2px);
+            background-size: 40px 40px;
+            position: relative;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* Main pink container */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+            border: 8px solid #ff4d6d;
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10; /* Higher than images */
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, #ff4d6d, #ff9999, #ff4d6d);
+        }
+        
+        h1 {
+            color: #ff3366;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.2;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .hearts {
+            font-size: 2.5rem;
+            color: #ff4d6d;
+            margin: 25px 0;
+            animation: pulse 1.5s infinite alternate;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 18px 40px;
+            font-size: 1.8rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+        }
+        
+        .yes-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .yes-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .no-btn {
+            background-color: #ff3333;
+            color: white;
+        }
+        
+        .no-btn:hover {
+            background-color: #e60000;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 51, 51, 0.4);
+        }
+        
+        .sure-page .options {
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            min-height: 200px;
+        }
+        
+        .sure-page .no-btn {
+            background-color: #ff9933;
+        }
+        
+        .sure-page .no-btn:hover {
+            background-color: #e68a00;
+        }
+        
+        /* Angry page styles */
+        .angry-page .hearts {
+            color: #ff3333;
+            animation: angryPulse 0.8s infinite alternate;
+        }
+        
+        .angry-page .no-btn {
+            background-color: #990000;
+            color: white;
+            font-size: 2rem;
+            padding: 20px 50px;
+            min-width: 220px;
+            margin-top: 30px;
+        }
+        
+        .angry-page .no-btn:hover {
+            background-color: #660000;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(153, 0, 0, 0.4);
+        }
+        
+        /* Small yes button for "Are you sure?" page */
+        .small-yes-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 9px 20px; /* 50% smaller than regular button (18px/2=9px, 40px/2=20px) */
+            font-size: 0.9rem; /* 50% smaller than 1.8rem */
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            min-width: 90px; /* 50% smaller than 180px */
+            background-color: #4CAF50;
+            color: white;
+            z-index: 2;
+        }
+        
+        .small-yes-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+        }
+        
+        .celebration {
+            font-size: 6rem;
+            color: #ff4d6d;
+            margin: 30px 0;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        .message {
+            font-size: 2.2rem;
+            color: #ff3366;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+        
+        .sub-message {
+            font-size: 1.4rem;
+            color: #666;
+            margin-top: 20px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            color: #999;
+            font-size: 1rem;
+        }
+        
+        .heart-decoration {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 77, 109, 0.3);
+            animation: float 6s infinite linear;
+            z-index: 5;
+        }
+        
+        /* Side Images - Positioned outside container */
+        .side-image {
+            position: fixed; /* Changed to fixed to stay in viewport */
+            width: 350px;
+            height: 350px;
+            object-fit: contain;
+            z-index: 1; /* Lower than container */
+            filter: drop-shadow(0 5px 15px rgba(255, 77, 109, 0.4));
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            pointer-events: none; /* Allow clicks to pass through to buttons */
+        }
+        
+        .side-image:hover {
+            transform: scale(1.05);
+        }
+        
+        /* First page images */
+        .page1-left-image {
+            left: calc(50% - 750px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .page1-right-image {
+            right: calc(50% - 800px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Second page images */
+        .page2-left-image {
+            left: calc(50% - 750px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .page2-right-image {
+            right: calc(50% - 800px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Third page images */
+        .page3-left-image {
+            left: calc(50% - 750px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .page3-right-image {
+            right: calc(50% - 800px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Angry page images */
+        .angry-left-image {
+            left: calc(50% - 750px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .angry-right-image {
+            right: calc(50% - 800px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        
+        @keyframes angryPulse {
+            0% { transform: scale(1); color: #ff3333; }
+            50% { transform: scale(1.2); color: #ff0000; }
+            100% { transform: scale(1); color: #ff3333; }
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        @keyframes celebrate {
+            0% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: calc(50% - 700px);
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: calc(50% - 750px);
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .side-image {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: calc(50% - 650px);
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: calc(50% - 700px);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .side-image {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: calc(50% - 600px);
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: calc(50% - 650px);
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .side-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: calc(50% - 550px);
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: calc(50% - 600px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .btn {
+                padding: 15px 30px;
+                font-size: 1.5rem;
+                min-width: 140px;
+            }
+            
+            .celebration {
+                font-size: 4.5rem;
+            }
+            
+            .message {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 30px 20px;
+                min-height: 450px;
+                max-width: 90%;
+            }
+            
+            .side-image {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: calc(50% - 500px);
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: calc(50% - 550px);
+            }
+            
+            .angry-page .no-btn {
+                font-size: 1.5rem;
+                padding: 15px 30px;
+                min-width: 160px;
+            }
+            
+            .small-yes-btn {
+                padding: 7.5px 15px; /* Adjusted for mobile */
+                font-size: 0.75rem;
+                min-width: 70px;
+                border-radius: 15px;
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .side-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: calc(50% - 450px);
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: calc(50% - 500px);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .side-image {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: 10px;
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 12px 24px;
+                font-size: 1.3rem;
+                min-width: 120px;
+            }
+            
+            .celebration {
+                font-size: 3.5rem;
+            }
+            
+            .message {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 20px 15px;
+                max-width: 95%;
+            }
+            
+            .options {
+                gap: 15px;
+            }
+            
+            .side-image {
+                width: 110px;
+                height: 110px;
+            }
+            
+            .page1-left-image,
+            .page2-left-image,
+            .page3-left-image,
+            .angry-left-image {
+                left: 5px;
+            }
+            
+            .page1-right-image,
+            .page2-right-image,
+            .page3-right-image,
+            .angry-right-image {
+                right: 10px;
+            }
+            
+            .angry-page .no-btn {
+                font-size: 1.2rem;
+                padding: 12px 24px;
+                min-width: 130px;
+            }
+            
+            .small-yes-btn {
+                padding: 6px 12px;
+                font-size: 0.65rem;
+                min-width: 60px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            /* Hide side images on very small screens */
+            .side-image {
+                display: none;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .small-yes-btn {
+                padding: 5px 10px;
+                font-size: 0.6rem;
+                min-width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- First Page Images -->
+    <img src="https://image2url.com/r2/default/images/1769712608417-eba176a8-4ac4-42a1-afac-a70b619bb55d.png" 
+         alt="Valentine's Day" 
+         class="side-image page1-left-image" 
+         id="page1LeftImage">
+    <img src="https://image2url.com/r2/default/images/1769712608417-eba176a8-4ac4-42a1-afac-a70b619bb55d.png" 
+         alt="Valentine's Day" 
+         class="side-image page1-right-image" 
+         id="page1RightImage">
+    
+    <!-- Second Page Images (hidden by default) -->
+    <img src="https://image2url.com/r2/default/images/1769714123035-9828571d-b355-4fea-b2ba-d2a802138e4f.png" 
+         alt="Are you sure?" 
+         class="side-image page2-left-image" 
+         id="page2LeftImage"
+         style="display: none;">
+    <img src="https://image2url.com/r2/default/images/1769714123035-9828571d-b355-4fea-b2ba-d2a802138e4f.png" 
+         alt="Are you sure?" 
+         class="side-image page2-right-image" 
+         id="page2RightImage"
+         style="display: none;">
+    
+    <!-- Third Page Images (hidden by default) -->
+    <img src="https://image2url.com/r2/default/images/1769715005076-62faa863-fc9a-473e-ac64-20b512d33919.png" 
+         alt="Celebration!" 
+         class="side-image page3-left-image" 
+         id="page3LeftImage"
+         style="display: none;">
+    <img src="https://image2url.com/r2/default/images/1769715005076-62faa863-fc9a-473e-ac64-20b512d33919.png" 
+         alt="Celebration!" 
+         class="side-image page3-right-image" 
+         id="page3RightImage"
+         style="display: none;">
+    
+    <!-- Angry Page Images (hidden by default) - NEW IMAGE -->
+    <img src="https://image2url.com/r2/default/images/1769717264482-43b57f94-f21d-4fb9-bf6a-42ca23fea473.png" 
+         alt="Are you really sure?" 
+         class="side-image angry-left-image" 
+         id="angryLeftImage"
+         style="display: none;">
+    <img src="https://image2url.com/r2/default/images/1769717264482-43b57f94-f21d-4fb9-bf6a-42ca23fea473.png" 
+         alt="Are you really sure?" 
+         class="side-image angry-right-image" 
+         id="angryRightImage"
+         style="display: none;">
+    
+    <!-- Main container -->
+    <div class="container">
+        <!-- Floating heart decorations inside container -->
+        <div class="heart-decoration" style="top: 10%; left: 5%;">❤</div>
+        <div class="heart-decoration" style="top: 15%; right: 10%;">❤</div>
+        <div class="heart-decoration" style="bottom: 20%; left: 8%;">❤</div>
+        <div class="heart-decoration" style="bottom: 10%; right: 5%;">❤</div>
+        
+        <!-- Page 1: Initial question -->
+        <div id="page1" class="page active">
+            <h1>Will you be my Valentine?</h1>
+            <div class="hearts">❤️ ❤️ ❤️</div>
+            <div class="options">
+                <button id="yesBtn" class="btn yes-btn">YES!</button>
+                <button id="noBtn" class="btn no-btn">No</button>
+            </div>
+            <p class="sub-message">This is a very important question, choose wisely!</p>
+        </div>
+        
+        <!-- Page 2: Are you sure? -->
+        <div id="page2" class="page sure-page">
+            <h1>Are you sure?</h1>
+            <div class="hearts">💔 💔 💔</div>
+            <p class="message">🥺 🥺 🥺</p>
+            <div class="options">
+                <button id="noOption1" class="btn no-btn">No</button>
+                <button id="noOption2" class="btn no-btn">No</button>
+                <!-- Small Yes button in bottom right corner -->
+                <button id="smallYesBtn" class="small-yes-btn">Yes</button>
+            </div>
+            <p class="sub-message">hehehe...</p>
+        </div>
+        
+        <!-- Page 3: Are you realllyyyyyyyy sure? -->
+        <div id="page3-angry" class="page angry-page">
+            <h1>Are you realllyyyyyyyy sure?</h1>
+            <div class="hearts">😠 😡 🤬</div>
+            <div class="options">
+                <button id="angryNoBtn" class="btn no-btn">No</button>
+            </div>
+            <!-- Removed the message and sub-message -->
+        </div>
+        
+        <!-- Page 4: Celebration page -->
+        <div id="page4" class="page">
+            <div class="celebration">🎉 ❤️ 🎊</div>
+            <h1>YAYAYAYAYAYAY!</h1>
+            <div class="message">You've made me the happiest person in the world!</div>
+            <div class="hearts">🤭 🤭 🤭</div>
+            <p class="sub-message">Thank you for being my Valentine! ❤️</p>
+            <button id="restartBtn" class="btn yes-btn" style="margin-top: 20px;">Ask Again</button>
+        </div>
+        
+        <div class="footer">
+            Made for my baby :3
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const page3Angry = document.getElementById('page3-angry');
+        const page4 = document.getElementById('page4');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const noOption1 = document.getElementById('noOption1');
+        const noOption2 = document.getElementById('noOption2');
+        const smallYesBtn = document.getElementById('smallYesBtn');
+        const angryNoBtn = document.getElementById('angryNoBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        
+        // Get side images
+        const page1LeftImage = document.getElementById('page1LeftImage');
+        const page1RightImage = document.getElementById('page1RightImage');
+        const page2LeftImage = document.getElementById('page2LeftImage');
+        const page2RightImage = document.getElementById('page2RightImage');
+        const page3LeftImage = document.getElementById('page3LeftImage');
+        const page3RightImage = document.getElementById('page3RightImage');
+        const angryLeftImage = document.getElementById('angryLeftImage');
+        const angryRightImage = document.getElementById('angryRightImage');
+        
+        // Store all images in arrays for easy access
+        const page1Images = [page1LeftImage, page1RightImage];
+        const page2Images = [page2LeftImage, page2RightImage];
+        const page3Images = [page3LeftImage, page3RightImage];
+        const angryImages = [angryLeftImage, angryRightImage];
+        const allImages = [...page1Images, ...page2Images, ...page3Images, ...angryImages];
+        
+        // Function to switch between pages
+        function showPage(pageToShow) {
+            // Hide all pages
+            page1.classList.remove('active');
+            page2.classList.remove('active');
+            page3Angry.classList.remove('active');
+            page4.classList.remove('active');
+            
+            // Show the requested page
+            pageToShow.classList.add('active');
+            
+            // Hide all images first
+            allImages.forEach(img => {
+                img.style.opacity = '0';
+                setTimeout(() => {
+                    img.style.display = 'none';
+                }, 500);
+            });
+            
+            // Show appropriate images based on page
+            if (pageToShow.id === 'page1') {
+                // Show first page images with animation
+                page1Images.forEach((img, index) => {
+                    setTimeout(() => {
+                        img.style.display = 'block';
+                        img.style.opacity = '0';
+                        img.style.transform = `translateY(-50%) scale(0.8) translateX(${index === 0 ? '-50px' : '100px'})`;
+                        
+                        setTimeout(() => {
+                            img.style.transition = 'opacity 1s ease, transform 1s ease';
+                            img.style.opacity = '1';
+                            img.style.transform = `translateY(-50%) scale(1)`;
+                        }, 50);
+                    }, index * 300 + 500);
+                });
+            } else if (pageToShow.id === 'page2') {
+                // Show second page images with animation
+                page2Images.forEach((img, index) => {
+                    setTimeout(() => {
+                        img.style.display = 'block';
+                        img.style.opacity = '0';
+                        img.style.transform = `translateY(-50%) scale(0.8) translateX(${index === 0 ? '-50px' : '100px'})`;
+                        
+                        setTimeout(() => {
+                            img.style.transition = 'opacity 1s ease, transform 1s ease';
+                            img.style.opacity = '1';
+                            img.style.transform = `translateY(-50%) scale(1)`;
+                        }, 50);
+                    }, index * 300 + 500);
+                });
+            } else if (pageToShow.id === 'page3-angry') {
+                // Show angry page images with animation
+                angryImages.forEach((img, index) => {
+                    setTimeout(() => {
+                        img.style.display = 'block';
+                        img.style.opacity = '0';
+                        img.style.transform = `translateY(-50%) scale(0.8) translateX(${index === 0 ? '-50px' : '100px'})`;
+                        
+                        setTimeout(() => {
+                            img.style.transition = 'opacity 1s ease, transform 1s ease';
+                            img.style.opacity = '1';
+                            img.style.transform = `translateY(-50%) scale(1)`;
+                        }, 50);
+                    }, index * 300 + 500);
+                });
+            } else if (pageToShow.id === 'page4') {
+                // Show third page images with celebration animation
+                page3Images.forEach((img, index) => {
+                    setTimeout(() => {
+                        img.style.display = 'block';
+                        img.style.opacity = '0';
+                        img.style.transform = `translateY(-50%) scale(0.5)`;
+                        
+                        setTimeout(() => {
+                            img.style.transition = 'opacity 1s ease, transform 1s ease';
+                            img.style.opacity = '1';
+                            img.style.transform = `translateY(-50%) scale(1)`;
+                            // Add celebration animation
+                            img.style.animation = 'celebrate 2s infinite ease-in-out';
+                        }, 50);
+                    }, index * 300 + 500);
+                });
+            }
+        }
+        
+        // Event listeners for buttons
+        yesBtn.addEventListener('click', function() {
+            // Play a sound effect for the celebration
+            playCelebrationSound();
+            showPage(page4);
+        });
+        
+        noBtn.addEventListener('click', function() {
+            showPage(page2);
+        });
+        
+        // Both "No" buttons on page 2 go back to page 1
+        noOption1.addEventListener('click', function() {
+            showPage(page1);
+        });
+        
+        noOption2.addEventListener('click', function() {
+            showPage(page1);
+        });
+        
+        // Small Yes button on page 2 goes to angry page
+        smallYesBtn.addEventListener('click', function() {
+            // Play angry sound
+            playAngrySound();
+            showPage(page3Angry);
+        });
+        
+        // Angry No button goes back to page 1
+        angryNoBtn.addEventListener('click', function() {
+            showPage(page1);
+        });
+        
+        // Restart button on celebration page
+        restartBtn.addEventListener('click', function() {
+            showPage(page1);
+        });
+        
+        // Function to play a celebration sound
+        function playCelebrationSound() {
+            try {
+                // Create audio context for simple beep sound
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+                
+                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.log("Audio context not supported, continuing without sound");
+            }
+        }
+        
+        // Function to play an angry sound
+        function playAngrySound() {
+            try {
+                // Create audio context for angry sound
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Angry descending tone
+                oscillator.frequency.setValueAtTime(392.00, audioContext.currentTime); // G4
+                oscillator.frequency.setValueAtTime(349.23, audioContext.currentTime + 0.1); // F4
+                oscillator.frequency.setValueAtTime(293.66, audioContext.currentTime + 0.2); // D4
+                
+                gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log("Audio context not supported, continuing without sound");
+            }
+        }
+        
+        // Add a fun animation to side images when page loads
+        window.addEventListener('load', function() {
+            // Show first page images on load
+            page1Images.forEach((img, index) => {
+                img.style.opacity = '0';
+                const startDistance = index === 0 ? '-50px' : '100px';
+                img.style.transform = `translateY(-50%) scale(0.8) translateX(${startDistance})`;
+                
+                // Animate them in one by one
+                setTimeout(() => {
+                    img.style.transition = 'opacity 1s ease, transform 1s ease';
+                    img.style.opacity = '1';
+                    img.style.transform = `translateY(-50%) scale(1)`;
+                }, index * 300 + 500);
+            });
+            
+            // Hide other page images
+            page2Images.forEach(img => {
+                img.style.display = 'none';
+            });
+            page3Images.forEach(img => {
+                img.style.display = 'none';
+            });
+            angryImages.forEach(img => {
+                img.style.display = 'none';
+            });
+        });
+        
+    </script>
+</body>
+</html>
