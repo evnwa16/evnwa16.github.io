@@ -3,915 +3,651 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine?</title>
+    <title>Hydro Valentine • 50/50 Blessing</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
         }
-        
+
         body {
-            background-color: #ffe6e6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Zen Maru Gothic', 'Arial Rounded', sans-serif;
             min-height: 100vh;
-            padding: 20px;
-            background-image: radial-gradient(#ff9999 2px, transparent 2px);
-            background-size: 40px 40px;
+            background: linear-gradient(145deg, #0a2a4a 0%, #1b4f6e 35%, #0e3b4f 70%, #042433 100%);
             position: relative;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        
-        /* Main pink container */
-        .container {
-            max-width: 800px;
+
+        /* Hydro background effects */
+        .hydro-background {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hydro-sigil {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.08) 2px, transparent 2px),
+                radial-gradient(circle at 80% 70%, rgba(64, 224, 208, 0.08) 3px, transparent 3px),
+                radial-gradient(circle at 40% 80%, rgba(72, 209, 204, 0.08) 2px, transparent 2px),
+                radial-gradient(circle at 90% 20%, rgba(32, 178, 170, 0.08) 4px, transparent 4px);
+            background-size: 80px 80px;
+            opacity: 0.8;
+        }
+
+        .wave-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: repeating-linear-gradient(
+                120deg,
+                transparent,
+                transparent 30px,
+                rgba(0, 206, 209, 0.03) 30px,
+                rgba(0, 206, 209, 0.03) 60px
+            );
+            animation: waveMove 20s linear infinite;
+        }
+
+        /* Bubble animation */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(77, 208, 225, 0.3));
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: rise 10s infinite ease-in;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+        }
+
+        .bubble:nth-child(1) { left: 10%; width: 30px; height: 30px; animation-duration: 12s; }
+        .bubble:nth-child(2) { left: 20%; width: 15px; height: 15px; animation-duration: 8s; animation-delay: 2s; }
+        .bubble:nth-child(3) { left: 35%; width: 45px; height: 45px; animation-duration: 15s; animation-delay: 4s; }
+        .bubble:nth-child(4) { left: 50%; width: 20px; height: 20px; animation-duration: 9s; animation-delay: 1s; }
+        .bubble:nth-child(5) { left: 65%; width: 35px; height: 35px; animation-duration: 13s; animation-delay: 3s; }
+        .bubble:nth-child(6) { left: 80%; width: 25px; height: 25px; animation-duration: 11s; animation-delay: 5s; }
+        .bubble:nth-child(7) { left: 95%; width: 40px; height: 40px; animation-duration: 14s; animation-delay: 2.5s; }
+        .bubble:nth-child(8) { left: 45%; width: 18px; height: 18px; animation-duration: 10s; animation-delay: 6s; }
+        .bubble:nth-child(9) { left: 75%; width: 28px; height: 28px; animation-duration: 12s; animation-delay: 1.5s; }
+        .bubble:nth-child(10) { left: 15%; width: 22px; height: 22px; animation-duration: 9s; animation-delay: 4.5s; }
+        .bubble:nth-child(11) { left: 88%; width: 32px; height: 32px; animation-duration: 13s; animation-delay: 3.2s; }
+        .bubble:nth-child(12) { left: 5%; width: 38px; height: 38px; animation-duration: 11s; animation-delay: 5.8s; }
+
+        /* Main content container */
+        .content {
+            position: relative;
+            z-index: 20;
+            max-width: 1300px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            background: rgba(10, 42, 74, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 60px;
+            padding: 50px;
+            border: 2px solid rgba(77, 208, 225, 0.6);
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.3),
+                0 0 80px rgba(64, 224, 208, 0.2),
+                inset 0 0 30px rgba(72, 209, 204, 0.2);
+            animation: containerGlow 4s infinite alternate;
+        }
+
+        .left-side {
+            flex: 1;
             text-align: center;
-            background-color: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
-            border: 8px solid #ff4d6d;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #e6f7ff;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-shadow: 
+                0 0 20px #00ffff,
+                0 0 40px #008b8b,
+                0 0 60px #006994,
+                4px 4px 0 rgba(0, 20, 30, 0.5);
+            line-height: 1.2;
+            letter-spacing: 4px;
+        }
+
+        .hydro-orb {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: radial-gradient(circle at 30% 30%, #4dd0e1, #0097a7);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 30px #00bcd4,
+                0 0 60px #00acc1,
+                inset 0 0 30px rgba(255, 255, 255, 0.8);
+            animation: orbFloat 4s infinite alternate;
+            position: relative;
+        }
+
+        .hydro-orb::before,
+        .hydro-orb::after {
+            content: '💧';
+            position: absolute;
+            font-size: 30px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 20px cyan;
+            animation: drip 3s infinite;
+        }
+
+        .hydro-orb::before { top: -20px; left: -20px; animation-delay: 0s; }
+        .hydro-orb::after { bottom: -20px; right: -20px; animation-delay: 1.5s; }
+
+        .button-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .yes-btn {
+            padding: 20px 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #1e88e5, #0d47a1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 10px 0 #0a3563,
+                0 0 30px #2194f3,
+                0 0 60px #0d47a1;
+            border-bottom: 4px solid #81d4fa;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             position: relative;
             overflow: hidden;
-            min-height: 500px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            z-index: 10; /* Higher than images */
+            z-index: 30;
         }
-        
-        .container::before {
+
+        .yes-btn::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 10px;
-            background: linear-gradient(90deg, #ff4d6d, #ff9999, #ff4d6d);
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.6s;
         }
-        
-        h1 {
-            color: #ff3366;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            line-height: 1.2;
+
+        .yes-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 0 #0a3563,
+                0 0 40px #42a5f5,
+                0 0 80px #1565c0;
+            background: linear-gradient(145deg, #2196f3, #1565c0);
         }
-        
-        .page {
-            display: none;
-            animation: fadeIn 0.8s ease;
+
+        .yes-btn:hover::before {
+            left: 100%;
         }
-        
-        .active {
-            display: block;
+
+        .no-btn {
+            padding: 20px 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #2c3e50, #1a2632);
+            color: #a0c0d0;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 0 #0f1a1f, 0 0 20px #4a6fa5;
+            border-bottom: 4px solid #5d8bb7;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 30;
         }
-        
-        .hearts {
-            font-size: 2.5rem;
-            color: #ff4d6d;
-            margin: 25px 0;
-            animation: pulse 1.5s infinite alternate;
+
+        .no-btn:hover {
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 0 #0f1a1f, 0 0 30px #5d8bb7;
         }
-        
-        .options {
+
+        .no-btn.destroyed {
+            animation: shatter 0.5s forwards;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        /* Right side - Your image */
+        .right-side {
+            flex: 0.8;
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            align-items: center;
+            position: relative;
         }
-        
-        .btn {
-            padding: 18px 40px;
+
+        .character-image {
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            filter: 
+                drop-shadow(0 0 30px rgba(0, 255, 255, 0.7))
+                drop-shadow(0 0 60px rgba(64, 224, 208, 0.5))
+                brightness(1.1);
+            transition: all 0.5s ease;
+            animation: imageFloat 5s infinite alternate;
+            border-radius: 20px;
+        }
+
+        .character-image.spinning {
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .laser-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: linear-gradient(90deg, #00ffff, #0066ff, #0000ff);
+            box-shadow: 0 0 40px #00ffff, 0 0 80px #0066ff, 0 0 120px #0000ff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+        }
+
+        .laser-effect.active {
+            animation: laserBlast 0.8s forwards;
+        }
+
+        /* Success Page */
+        .success-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #0a2a4a 0%, #1b4f6e 35%, #0e3b4f 70%, #042433 100%);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: hydroRise 1s ease;
+        }
+
+        .success-page.active {
+            display: flex;
+        }
+
+        .success-content {
+            max-width: 900px;
+            text-align: center;
+            background: rgba(10, 42, 74, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 80px;
+            padding: 60px;
+            border: 3px solid rgba(77, 208, 225, 0.8);
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.5);
+            animation: successFloat 4s infinite alternate;
+        }
+
+        .success-content h1 {
+            font-size: 5.5rem;
+            margin-bottom: 30px;
+            color: #b3f0ff;
+            text-shadow: 0 0 30px cyan, 0 0 60px #008b8b, 0 0 90px #006994;
+        }
+
+        .success-content .message {
+            font-size: 2.5rem;
+            color: #e0f7fa;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #00bcd4;
+            line-height: 1.4;
+        }
+
+        .success-content .blessing {
+            font-size: 2rem;
+            color: #ffd54f;
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 60px;
+            border: 2px solid #ffb74d;
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+            text-shadow: 0 0 15px #ff8c00;
+            animation: blessingGlow 2s infinite alternate;
+        }
+
+        .success-content .hydro-blessing {
+            font-size: 4rem;
+            margin: 20px 0;
+            animation: spin 10s linear infinite;
+            display: inline-block;
+        }
+
+        .reset-btn {
+            margin-top: 40px;
+            padding: 18px 45px;
             font-size: 1.8rem;
+            background: linear-gradient(145deg, #1e88e5, #0d47a1);
+            color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s;
+            box-shadow: 0 0 30px #2194f3;
+            border-bottom: 4px solid #81d4fa;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            min-width: 180px;
         }
-        
-        .yes-btn {
-            background-color: #4CAF50;
-            color: white;
+
+        .reset-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px #42a5f5;
         }
-        
-        .yes-btn:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
-        }
-        
-        .no-btn {
-            background-color: #ff3333;
-            color: white;
-        }
-        
-        .no-btn:hover {
-            background-color: #e60000;
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 51, 51, 0.4);
-        }
-        
-        .sure-page .options {
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            min-height: 200px;
-        }
-        
-        .sure-page .no-btn {
-            background-color: #ff9933;
-        }
-        
-        .sure-page .no-btn:hover {
-            background-color: #e68a00;
-        }
-        
-        /* Angry page styles */
-        .angry-page .hearts {
-            color: #ff3333;
-            animation: angryPulse 0.8s infinite alternate;
-        }
-        
-        .angry-page .no-btn {
-            background-color: #990000;
-            color: white;
-            font-size: 2rem;
-            padding: 20px 50px;
-            min-width: 220px;
-            margin-top: 30px;
-        }
-        
-        .angry-page .no-btn:hover {
-            background-color: #660000;
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(153, 0, 0, 0.4);
-        }
-        
-        /* Small yes button for "Are you sure?" page */
-        .small-yes-btn {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            padding: 9px 20px; /* 50% smaller than regular button (18px/2=9px, 40px/2=20px) */
-            font-size: 0.9rem; /* 50% smaller than 1.8rem */
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            min-width: 90px; /* 50% smaller than 180px */
-            background-color: #4CAF50;
-            color: white;
-            z-index: 2;
-        }
-        
-        .small-yes-btn:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
-        }
-        
-        .celebration {
-            font-size: 6rem;
-            color: #ff4d6d;
-            margin: 30px 0;
-            animation: bounce 1s infinite alternate;
-        }
-        
-        .message {
-            font-size: 2.2rem;
-            color: #ff3366;
-            margin: 20px 0;
-            line-height: 1.4;
-        }
-        
-        .sub-message {
-            font-size: 1.4rem;
-            color: #666;
-            margin-top: 20px;
-        }
-        
-        .footer {
-            margin-top: 40px;
-            color: #999;
-            font-size: 1rem;
-        }
-        
-        .heart-decoration {
-            position: absolute;
-            font-size: 2rem;
-            color: rgba(255, 77, 109, 0.3);
-            animation: float 6s infinite linear;
-            z-index: 5;
-        }
-        
-        /* Side Images - Positioned outside container */
-        .side-image {
-            position: fixed; /* Changed to fixed to stay in viewport */
-            width: 350px;
-            height: 350px;
-            object-fit: contain;
-            z-index: 1; /* Lower than container */
-            filter: drop-shadow(0 5px 15px rgba(255, 77, 109, 0.4));
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            pointer-events: none; /* Allow clicks to pass through to buttons */
-        }
-        
-        .side-image:hover {
-            transform: scale(1.05);
-        }
-        
-        /* First page images */
-        .page1-left-image {
-            left: calc(50% - 750px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        .page1-right-image {
-            right: calc(50% - 800px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        /* Second page images */
-        .page2-left-image {
-            left: calc(50% - 750px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        .page2-right-image {
-            right: calc(50% - 800px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        /* Third page images */
-        .page3-left-image {
-            left: calc(50% - 750px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        .page3-right-image {
-            right: calc(50% - 800px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        /* Angry page images */
-        .angry-left-image {
-            left: calc(50% - 750px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        .angry-right-image {
-            right: calc(50% - 800px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
+
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes rise {
+            0% { bottom: -100px; transform: translateX(0) scale(1); opacity: 0.6; }
+            50% { transform: translateX(20px) scale(1.1); opacity: 0.8; }
+            100% { bottom: 1080px; transform: translateX(-20px) scale(0.8); opacity: 0; }
         }
-        
-        @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
+
+        @keyframes waveMove {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-50px) translateY(-30px); }
         }
-        
-        @keyframes angryPulse {
-            0% { transform: scale(1); color: #ff3333; }
-            50% { transform: scale(1.2); color: #ff0000; }
-            100% { transform: scale(1); color: #ff3333; }
+
+        @keyframes containerGlow {
+            0% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.3), 0 0 80px rgba(64, 224, 208, 0.2); }
+            100% { box-shadow: 0 0 60px rgba(0, 255, 255, 0.5), 0 0 100px rgba(64, 224, 208, 0.4); }
         }
-        
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-20px); }
+
+        @keyframes orbFloat {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-15px) scale(1.05); }
         }
-        
-        @keyframes float {
+
+        @keyframes drip {
+            0% { transform: translateY(0) scale(1); opacity: 0.9; }
+            100% { transform: translateY(30px) scale(0.8); opacity: 0; }
+        }
+
+        @keyframes imageFloat {
             0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-            100% { transform: translateY(0) rotate(360deg); }
+            100% { transform: translateY(-15px) rotate(2deg); }
         }
-        
-        @keyframes celebrate {
-            0% { transform: translateY(-50%) scale(1); }
-            50% { transform: translateY(-50%) scale(1.1); }
-            100% { transform: translateY(-50%) scale(1); }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1.2); }
         }
-        
-        /* Responsive adjustments */
-        @media (max-width: 1400px) {
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: calc(50% - 700px);
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: calc(50% - 750px);
-            }
+
+        @keyframes laserBlast {
+            0% { width: 0; height: 0; opacity: 1; }
+            20% { width: 200px; height: 200px; opacity: 1; }
+            50% { width: 800px; height: 800px; opacity: 0.8; }
+            80% { width: 1200px; height: 1200px; opacity: 0.4; }
+            100% { width: 2000px; height: 2000px; opacity: 0; }
         }
-        
-        @media (max-width: 1200px) {
-            .side-image {
-                width: 280px;
-                height: 280px;
-            }
-            
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: calc(50% - 650px);
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: calc(50% - 700px);
-            }
+
+        @keyframes shatter {
+            0% { transform: scale(1); opacity: 1; }
+            20% { transform: scale(1.2) rotate(10deg); opacity: 0.8; }
+            40% { transform: scale(1.5) rotate(-10deg); opacity: 0.6; }
+            60% { transform: scale(0.8) rotate(20deg); opacity: 0.4; }
+            80% { transform: scale(0.4) rotate(-20deg); opacity: 0.2; }
+            100% { transform: scale(0) rotate(40deg); opacity: 0; }
         }
-        
-        @media (max-width: 1024px) {
-            .side-image {
-                width: 250px;
-                height: 250px;
-            }
-            
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: calc(50% - 600px);
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: calc(50% - 650px);
-            }
+
+        @keyframes hydroRise {
+            from { opacity: 0; transform: scale(0.9); backdrop-filter: blur(0); }
+            to { opacity: 1; transform: scale(1); backdrop-filter: blur(20px); }
         }
-        
-        @media (max-width: 900px) {
-            .side-image {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: calc(50% - 550px);
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: calc(50% - 600px);
-            }
+
+        @keyframes successFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
         }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .btn {
-                padding: 15px 30px;
-                font-size: 1.5rem;
-                min-width: 140px;
-            }
-            
-            .celebration {
-                font-size: 4.5rem;
-            }
-            
-            .message {
-                font-size: 1.8rem;
-            }
-            
-            .container {
-                padding: 30px 20px;
-                min-height: 450px;
-                max-width: 90%;
-            }
-            
-            .side-image {
-                width: 180px;
-                height: 180px;
-            }
-            
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: calc(50% - 500px);
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: calc(50% - 550px);
-            }
-            
-            .angry-page .no-btn {
-                font-size: 1.5rem;
-                padding: 15px 30px;
-                min-width: 160px;
-            }
-            
-            .small-yes-btn {
-                padding: 7.5px 15px; /* Adjusted for mobile */
-                font-size: 0.75rem;
-                min-width: 70px;
-                border-radius: 15px;
-            }
+
+        @keyframes blessingGlow {
+            0% { box-shadow: 0 0 30px rgba(255, 193, 7, 0.5); }
+            100% { box-shadow: 0 0 60px rgba(255, 193, 7, 0.8); }
         }
-        
-        @media (max-width: 700px) {
-            .side-image {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: calc(50% - 450px);
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: calc(50% - 500px);
-            }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .content { flex-direction: column; padding: 40px; }
+            h1 { font-size: 3rem; }
+            .character-image { max-width: 350px; }
+            .success-content h1 { font-size: 4rem; }
+            .success-content .message { font-size: 2rem; }
         }
-        
+
         @media (max-width: 600px) {
-            .side-image {
-                width: 130px;
-                height: 130px;
-            }
-            
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: 10px;
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: 15px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .btn {
-                padding: 12px 24px;
-                font-size: 1.3rem;
-                min-width: 120px;
-            }
-            
-            .celebration {
-                font-size: 3.5rem;
-            }
-            
-            .message {
-                font-size: 1.5rem;
-            }
-            
-            .container {
-                padding: 20px 15px;
-                max-width: 95%;
-            }
-            
-            .options {
-                gap: 15px;
-            }
-            
-            .side-image {
-                width: 110px;
-                height: 110px;
-            }
-            
-            .page1-left-image,
-            .page2-left-image,
-            .page3-left-image,
-            .angry-left-image {
-                left: 5px;
-            }
-            
-            .page1-right-image,
-            .page2-right-image,
-            .page3-right-image,
-            .angry-right-image {
-                right: 10px;
-            }
-            
-            .angry-page .no-btn {
-                font-size: 1.2rem;
-                padding: 12px 24px;
-                min-width: 130px;
-            }
-            
-            .small-yes-btn {
-                padding: 6px 12px;
-                font-size: 0.65rem;
-                min-width: 60px;
-            }
-        }
-        
-        @media (max-width: 380px) {
-            /* Hide side images on very small screens */
-            .side-image {
-                display: none;
-            }
-            
-            .container {
-                max-width: 100%;
-            }
-            
-            .small-yes-btn {
-                padding: 5px 10px;
-                font-size: 0.6rem;
-                min-width: 50px;
-            }
+            .content { padding: 30px; }
+            h1 { font-size: 2.2rem; }
+            .button-container { flex-direction: column; }
+            .yes-btn, .no-btn { padding: 15px 40px; font-size: 1.8rem; }
+            .success-content { padding: 40px 20px; }
+            .success-content h1 { font-size: 3rem; }
+            .success-content .message { font-size: 1.6rem; }
+            .success-content .blessing { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
-    <!-- First Page Images -->
-    <img src="https://image2url.com/r2/default/images/1769712608417-eba176a8-4ac4-42a1-afac-a70b619bb55d.png" 
-         alt="Valentine's Day" 
-         class="side-image page1-left-image" 
-         id="page1LeftImage">
-    <img src="https://image2url.com/r2/default/images/1769712608417-eba176a8-4ac4-42a1-afac-a70b619bb55d.png" 
-         alt="Valentine's Day" 
-         class="side-image page1-right-image" 
-         id="page1RightImage">
+    <!-- Hydro Background -->
+    <div class="hydro-background">
+        <div class="hydro-sigil"></div>
+        <div class="wave-lines"></div>
+    </div>
     
-    <!-- Second Page Images (hidden by default) -->
-    <img src="https://image2url.com/r2/default/images/1769714123035-9828571d-b355-4fea-b2ba-d2a802138e4f.png" 
-         alt="Are you sure?" 
-         class="side-image page2-left-image" 
-         id="page2LeftImage"
-         style="display: none;">
-    <img src="https://image2url.com/r2/default/images/1769714123035-9828571d-b355-4fea-b2ba-d2a802138e4f.png" 
-         alt="Are you sure?" 
-         class="side-image page2-right-image" 
-         id="page2RightImage"
-         style="display: none;">
-    
-    <!-- Third Page Images (hidden by default) -->
-    <img src="https://image2url.com/r2/default/images/1769715005076-62faa863-fc9a-473e-ac64-20b512d33919.png" 
-         alt="Celebration!" 
-         class="side-image page3-left-image" 
-         id="page3LeftImage"
-         style="display: none;">
-    <img src="https://image2url.com/r2/default/images/1769715005076-62faa863-fc9a-473e-ac64-20b512d33919.png" 
-         alt="Celebration!" 
-         class="side-image page3-right-image" 
-         id="page3RightImage"
-         style="display: none;">
-    
-    <!-- Angry Page Images (hidden by default) - NEW IMAGE -->
-    <img src="https://image2url.com/r2/default/images/1769717264482-43b57f94-f21d-4fb9-bf6a-42ca23fea473.png" 
-         alt="Are you really sure?" 
-         class="side-image angry-left-image" 
-         id="angryLeftImage"
-         style="display: none;">
-    <img src="https://image2url.com/r2/default/images/1769717264482-43b57f94-f21d-4fb9-bf6a-42ca23fea473.png" 
-         alt="Are you really sure?" 
-         class="side-image angry-right-image" 
-         id="angryRightImage"
-         style="display: none;">
-    
-    <!-- Main container -->
-    <div class="container">
-        <!-- Floating heart decorations inside container -->
-        <div class="heart-decoration" style="top: 10%; left: 5%;">❤</div>
-        <div class="heart-decoration" style="top: 15%; right: 10%;">❤</div>
-        <div class="heart-decoration" style="bottom: 20%; left: 8%;">❤</div>
-        <div class="heart-decoration" style="bottom: 10%; right: 5%;">❤</div>
-        
-        <!-- Page 1: Initial question -->
-        <div id="page1" class="page active">
+    <!-- Floating Bubbles -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content" id="mainContent">
+        <div class="left-side">
+            <div class="hydro-orb"></div>
             <h1>Will you be my Valentine?</h1>
-            <div class="hearts">❤️ ❤️ ❤️</div>
-            <div class="options">
-                <button id="yesBtn" class="btn yes-btn">YES!</button>
-                <button id="noBtn" class="btn no-btn">No</button>
+            
+            <div class="button-container">
+                <button id="yesBtn" class="yes-btn">YES! 💙</button>
+                <button id="noBtn" class="no-btn">No 🌊</button>
             </div>
-            <p class="sub-message">This is a very important question, choose wisely!</p>
+            
+            <p style="color: #b2ebf2; margin-top: 40px; font-size: 1.3rem; text-shadow: 0 0 10px #006064;">
+                💧 The Hydro Archon blesses this decision... 💧
+            </p>
         </div>
         
-        <!-- Page 2: Are you sure? -->
-        <div id="page2" class="page sure-page">
-            <h1>Are you sure?</h1>
-            <div class="hearts">💔 💔 💔</div>
-            <p class="message">🥺 🥺 🥺</p>
-            <div class="options">
-                <button id="noOption1" class="btn no-btn">No</button>
-                <button id="noOption2" class="btn no-btn">No</button>
-                <!-- Small Yes button in bottom right corner -->
-                <button id="smallYesBtn" class="small-yes-btn">Yes</button>
+        <div class="right-side">
+            <!-- YOUR IMAGE IS HERE! -->
+            <img id="hydroCharacter" 
+                 src="https://i.imgur.com/cMvVeWv.png" 
+                 alt="Hydro Valentine Character" 
+                 class="character-image">
+            <div id="laser" class="laser-effect"></div>
+        </div>
+    </div>
+
+    <!-- Success Page -->
+    <div id="successPage" class="success-page">
+        <div class="success-content">
+            <div class="hydro-blessing">💧 💙 🌊</div>
+            <h1>YAYAYAYAYAYAYAYAYAY!</h1>
+            <div class="message">you make me the happiest man in the world</div>
+            <div class="blessing">
+                I wish you the best of luck with your future 50/50s! ✨
             </div>
-            <p class="sub-message">hehehe...</p>
-        </div>
-        
-        <!-- Page 3: Are you realllyyyyyyyy sure? -->
-        <div id="page3-angry" class="page angry-page">
-            <h1>Are you realllyyyyyyyy sure?</h1>
-            <div class="hearts">😠 😡 🤬</div>
-            <div class="options">
-                <button id="angryNoBtn" class="btn no-btn">No</button>
+            <div style="font-size: 3rem; margin: 30px 0; color: #81d4fa;">
+                🎉 💧 💙 🌊 💎 🎉
             </div>
-            <!-- Removed the message and sub-message -->
-        </div>
-        
-        <!-- Page 4: Celebration page -->
-        <div id="page4" class="page">
-            <div class="celebration">🎉 ❤️ 🎊</div>
-            <h1>YAYAYAYAYAYAY!</h1>
-            <div class="message">You've made me the happiest person in the world!</div>
-            <div class="hearts">🤭 🤭 🤭</div>
-            <p class="sub-message">Thank you for being my Valentine! ❤️</p>
-            <button id="restartBtn" class="btn yes-btn" style="margin-top: 20px;">Ask Again</button>
-        </div>
-        
-        <div class="footer">
-            Made for my baby :3
+            <button id="resetBtn" class="reset-btn">Start Over 💧</button>
         </div>
     </div>
 
     <script>
-        // DOM Elements
-        const page1 = document.getElementById('page1');
-        const page2 = document.getElementById('page2');
-        const page3Angry = document.getElementById('page3-angry');
-        const page4 = document.getElementById('page4');
+        // Get elements
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
-        const noOption1 = document.getElementById('noOption1');
-        const noOption2 = document.getElementById('noOption2');
-        const smallYesBtn = document.getElementById('smallYesBtn');
-        const angryNoBtn = document.getElementById('angryNoBtn');
-        const restartBtn = document.getElementById('restartBtn');
-        
-        // Get side images
-        const page1LeftImage = document.getElementById('page1LeftImage');
-        const page1RightImage = document.getElementById('page1RightImage');
-        const page2LeftImage = document.getElementById('page2LeftImage');
-        const page2RightImage = document.getElementById('page2RightImage');
-        const page3LeftImage = document.getElementById('page3LeftImage');
-        const page3RightImage = document.getElementById('page3RightImage');
-        const angryLeftImage = document.getElementById('angryLeftImage');
-        const angryRightImage = document.getElementById('angryRightImage');
-        
-        // Store all images in arrays for easy access
-        const page1Images = [page1LeftImage, page1RightImage];
-        const page2Images = [page2LeftImage, page2RightImage];
-        const page3Images = [page3LeftImage, page3RightImage];
-        const angryImages = [angryLeftImage, angryRightImage];
-        const allImages = [...page1Images, ...page2Images, ...page3Images, ...angryImages];
-        
-        // Function to switch between pages
-        function showPage(pageToShow) {
-            // Hide all pages
-            page1.classList.remove('active');
-            page2.classList.remove('active');
-            page3Angry.classList.remove('active');
-            page4.classList.remove('active');
-            
-            // Show the requested page
-            pageToShow.classList.add('active');
-            
-            // Hide all images first
-            allImages.forEach(img => {
-                img.style.opacity = '0';
-                setTimeout(() => {
-                    img.style.display = 'none';
-                }, 500);
-            });
-            
-            // Show appropriate images based on page
-            if (pageToShow.id === 'page1') {
-                // Show first page images with animation
-                page1Images.forEach((img, index) => {
-                    setTimeout(() => {
-                        img.style.display = 'block';
-                        img.style.opacity = '0';
-                        img.style.transform = `translateY(-50%) scale(0.8) translateX(${index === 0 ? '-50px' : '100px'})`;
-                        
-                        setTimeout(() => {
-                            img.style.transition = 'opacity 1s ease, transform 1s ease';
-                            img.style.opacity = '1';
-                            img.style.transform = `translateY(-50%) scale(1)`;
-                        }, 50);
-                    }, index * 300 + 500);
-                });
-            } else if (pageToShow.id === 'page2') {
-                // Show second page images with animation
-                page2Images.forEach((img, index) => {
-                    setTimeout(() => {
-                        img.style.display = 'block';
-                        img.style.opacity = '0';
-                        img.style.transform = `translateY(-50%) scale(0.8) translateX(${index === 0 ? '-50px' : '100px'})`;
-                        
-                        setTimeout(() => {
-                            img.style.transition = 'opacity 1s ease, transform 1s ease';
-                            img.style.opacity = '1';
-                            img.style.transform = `translateY(-50%) scale(1)`;
-                        }, 50);
-                    }, index * 300 + 500);
-                });
-            } else if (pageToShow.id === 'page3-angry') {
-                // Show angry page images with animation
-                angryImages.forEach((img, index) => {
-                    setTimeout(() => {
-                        img.style.display = 'block';
-                        img.style.opacity = '0';
-                        img.style.transform = `translateY(-50%) scale(0.8) translateX(${index === 0 ? '-50px' : '100px'})`;
-                        
-                        setTimeout(() => {
-                            img.style.transition = 'opacity 1s ease, transform 1s ease';
-                            img.style.opacity = '1';
-                            img.style.transform = `translateY(-50%) scale(1)`;
-                        }, 50);
-                    }, index * 300 + 500);
-                });
-            } else if (pageToShow.id === 'page4') {
-                // Show third page images with celebration animation
-                page3Images.forEach((img, index) => {
-                    setTimeout(() => {
-                        img.style.display = 'block';
-                        img.style.opacity = '0';
-                        img.style.transform = `translateY(-50%) scale(0.5)`;
-                        
-                        setTimeout(() => {
-                            img.style.transition = 'opacity 1s ease, transform 1s ease';
-                            img.style.opacity = '1';
-                            img.style.transform = `translateY(-50%) scale(1)`;
-                            // Add celebration animation
-                            img.style.animation = 'celebrate 2s infinite ease-in-out';
-                        }, 50);
-                    }, index * 300 + 500);
-                });
+        const character = document.getElementById('hydroCharacter');
+        const laser = document.getElementById('laser');
+        const successPage = document.getElementById('successPage');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Hydro sound effects
+        function playHydroSound(type) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                if (type === 'laser') {
+                    oscillator.frequency.setValueAtTime(100, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.3);
+                    oscillator.frequency.exponentialRampToValueAtTime(2000, audioContext.currentTime + 0.6);
+                    oscillator.type = 'sawtooth';
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.4, audioContext.currentTime + 0.3);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+                } else if (type === 'celebration') {
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.2);
+                    oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.4);
+                    oscillator.frequency.setValueAtTime(1046.50, audioContext.currentTime + 0.6);
+                    oscillator.type = 'sine';
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                }
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + (type === 'laser' ? 0.8 : 1));
+            } catch (e) {
+                console.log('Audio not supported');
             }
         }
-        
-        // Event listeners for buttons
+
+        // YES button - Celebration!
         yesBtn.addEventListener('click', function() {
-            // Play a sound effect for the celebration
-            playCelebrationSound();
-            showPage(page4);
+            playHydroSound('celebration');
+            successPage.classList.add('active');
         });
-        
+
+        // NO button - SPIN + LASER + DESTROY
         noBtn.addEventListener('click', function() {
-            showPage(page2);
-        });
-        
-        // Both "No" buttons on page 2 go back to page 1
-        noOption1.addEventListener('click', function() {
-            showPage(page1);
-        });
-        
-        noOption2.addEventListener('click', function() {
-            showPage(page1);
-        });
-        
-        // Small Yes button on page 2 goes to angry page
-        smallYesBtn.addEventListener('click', function() {
-            // Play angry sound
-            playAngrySound();
-            showPage(page3Angry);
-        });
-        
-        // Angry No button goes back to page 1
-        angryNoBtn.addEventListener('click', function() {
-            showPage(page1);
-        });
-        
-        // Restart button on celebration page
-        restartBtn.addEventListener('click', function() {
-            showPage(page1);
-        });
-        
-        // Function to play a celebration sound
-        function playCelebrationSound() {
-            try {
-                // Create audio context for simple beep sound
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
-                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
-                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
-                
-                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.5);
-            } catch (e) {
-                console.log("Audio context not supported, continuing without sound");
-            }
-        }
-        
-        // Function to play an angry sound
-        function playAngrySound() {
-            try {
-                // Create audio context for angry sound
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                // Angry descending tone
-                oscillator.frequency.setValueAtTime(392.00, audioContext.currentTime); // G4
-                oscillator.frequency.setValueAtTime(349.23, audioContext.currentTime + 0.1); // F4
-                oscillator.frequency.setValueAtTime(293.66, audioContext.currentTime + 0.2); // D4
-                
-                gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.3);
-            } catch (e) {
-                console.log("Audio context not supported, continuing without sound");
-            }
-        }
-        
-        // Add a fun animation to side images when page loads
-        window.addEventListener('load', function() {
-            // Show first page images on load
-            page1Images.forEach((img, index) => {
-                img.style.opacity = '0';
-                const startDistance = index === 0 ? '-50px' : '100px';
-                img.style.transform = `translateY(-50%) scale(0.8) translateX(${startDistance})`;
-                
-                // Animate them in one by one
-                setTimeout(() => {
-                    img.style.transition = 'opacity 1s ease, transform 1s ease';
-                    img.style.opacity = '1';
-                    img.style.transform = `translateY(-50%) scale(1)`;
-                }, index * 300 + 500);
-            });
+            // Disable button
+            noBtn.style.pointerEvents = 'none';
             
-            // Hide other page images
-            page2Images.forEach(img => {
-                img.style.display = 'none';
-            });
-            page3Images.forEach(img => {
-                img.style.display = 'none';
-            });
-            angryImages.forEach(img => {
-                img.style.display = 'none';
-            });
+            // Play laser sound
+            playHydroSound('laser');
+            
+            // Spin the image!
+            character.classList.add('spinning');
+            
+            // FIRE THE LASER!
+            setTimeout(() => {
+                laser.classList.add('active');
+            }, 800);
+            
+            // DESTROY the No button
+            setTimeout(() => {
+                noBtn.classList.add('destroyed');
+            }, 1200);
+            
+            // Clean up animations
+            setTimeout(() => {
+                character.classList.remove('spinning');
+                laser.classList.remove('active');
+            }, 2000);
         });
-        
+
+        // Reset button
+        resetBtn.addEventListener('click', function() {
+            successPage.classList.remove('active');
+            
+            // Restore No button
+            noBtn.classList.remove('destroyed');
+            noBtn.style.pointerEvents = 'auto';
+            noBtn.style.opacity = '1';
+            noBtn.style.transform = 'scale(1)';
+            
+            // Reset character
+            character.classList.remove('spinning');
+            
+            playHydroSound('celebration');
+        });
+
+        // Initialize audio
+        document.addEventListener('click', function initAudio() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            document.removeEventListener('click', initAudio);
+        }, { once: true });
     </script>
 </body>
 </html>
